@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sugoi,It Looks Promising</title>
+<style type="text/css">
+h4,h5{background-color:black;color:orange;}
+</style>
+<script type="text/javascript">
+function AsynchronousOperation(OperationCallBack){
+	var Promise={
+		IsResolved:false/**Status Of The Promise*/,
+		InternalCallBackQueue:[],/**Storing All Done CallBack Chain*/
+		Resolve:function(Data){
+			Promise.Data=Data;
+			ExecuteInternalCallBackQueue(Data);
+			Promise.IsResolved=true;
+		}/**Resolve Function Definition*/		
+	};
+	function ExecuteInternalCallBackQueue(Data){
+		while(Promise.InternalCallBackQueue.length){
+			/**
+			   Promise.Data Property Is Used To Remember Intermediate Data To Pass Into The Next Callback.This Allows Promise To Be Modified Inside Done Callback 
+			   And Return New Version Of The Promise.
+			*/
+			Promise.Data=Promise.InternalCallBackQueue.shift()(Promise.Data)||Promise.Data;
+		}
+	}
+	OperationCallBack(Promise);/**Invoking Actual Asynchronous Operation,You Know The Rest(WebApi,EventLoop,CallBackQueue)*/
+	var Deferred={
+		Done:function(DoneCallBack){
+			if(Promise.IsResolved){
+				/**
+				The Last Thing Missing Is That If Promise.IsResolved Is A Case[WithOut Any Asynchronous Part],Then Callback Must Be Called With Proper Promise.Data,
+				And Possibly Modify It.
+				*/
+				Promise.Data=DoneCallBack(Promise.Data)||Promise.Data;				
+			}else{
+				Promise.InternalCallBackQueue.push(DoneCallBack);
+			}
+			return Deferred;
+		}
+	};
+	return Deferred;
+}
+</script>
+<script type="text/javascript" data-content="This Script Will Test Above Script In Both Ways">
+/**Final Goal To Execute This Asynchronously*/
+AsynchronousOperation(function(PromiseInput){
+	var Data={"Id":["Itachi","Rikkudo","Minato","Hashirama","Madara"]};
+	setTimeout(function(){
+		console.log('01.First Console Output Will Be Like This:{"Id":["Itachi","Rikkudo","Minato","Hashirama","Madara"]}');
+		console.log('02.Second Console Output Will Be Like This:["Itachi","Rikkudo","Minato","Hashirama","Madara"]');
+		PromiseInput.Resolve(Data);
+	},10000);
+}).Done(function(Data){console.log('Inside Done:Asynchronously Comes After Synchronously:');console.log(Data);return Data.Id;
+}).Done(function(Data){console.log('Inside Done:Asynchronously Comes After Synchronously:');console.log(Data);});
+/**Final Goal To Execute This Synchronously*/
+AsynchronousOperation(function(PromiseInput){
+	var Data={"Id":['Itachi','Rikkudo','Minato','Hashirama','Madara']};
+	console.log('01.First Console Output Will Be Like This:{"Id":["Itachi","Rikkudo","Minato","Hashirama","Madara"]}');
+	console.log('02.Second Console Output Will Be Like This:["Itachi","Rikkudo","Minato","Hashirama","Madara"]');
+	PromiseInput.Resolve(Data);	
+}).Done(function(Data){console.log('Inside Done:Synchronously Comes B4 Asynchronously:');console.log(Data);return Data.Id;
+}).Done(function(Data){console.log('Inside Done:Synchronously Comes B4 Asynchronously:');console.log(Data);});
+</script>
+</head>
+<h4>Look At Your Console.</h4>
+<h5>For Explanation Goto SimplePromise.js File In JavaScript Directory Under "Source-->Main-->WebApp-->JavaScript"[Ignore Case Sensitivity For Directory Names]</h5>
+</html>
