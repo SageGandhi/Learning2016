@@ -39,42 +39,28 @@
 	});
 	Rasengan.ExtendingFunctionPrototype=Rasengan.prototype;
 	Rasengan.ExtendingFunctionPrototype.forEach=function(CallBack){
-		for(var Indx=0;Indx<this.length;Indx++){
-	        CallBack.call(this[Indx],this,Indx);
+		for(var Indx=0;Indx<this.SelectorLength;Indx++){
+	        CallBack.call(this[Indx],this[Indx],Indx);
 	    }
 	    return this;
 	};
 	Rasengan.ExtendingFunctionPrototype.addClass=function(ClassNames){
 		return this.forEach(function(){
-			this.className+=' '+ClassNames;
-		});
-		return this;
+			this.className=((this.className&&this.className.length>0)?(this.className.trim()+' '+ClassNames):(ClassNames));
+		});		
 	};
 	Rasengan.ExtendingFunctionPrototype.removeClass=function(ClassNames){
-        return this.each(function() {
+        return this.forEach(function() {
             this.className=this.className.replace(new RegExp('\\b'+ClassNames+'\\b','g'),'');
-        });
-        return this;
+        });        
     };
 	Rasengan.ExtendingFunctionPrototype.setText=function(SetTextString) {
 	    if(SetTextString){
 	        return this.forEach(function(){
 	            this.innerText=SetTextString;
+	            this.innerHTML=SetTextString;
 	        });
-	    }
-	    return this;
-	};
-	Rasengan.ExtendingFunctionPrototype.on=function(EventType,CallBackHandler){
-	    return this.forEach(function(){
-	        this.addEventListener(EventType,CallBackHandler,false);
-	    });
-	    return this;
-	};
-	Rasengan.ExtendingFunctionPrototype.off=function(EventType,CallBackHandler){
-	    return this.forEach(function(){
-	        this.removeEventListener(EventType,CallBackHandler);
-	    });
-	    return this;
-	};
+	    }	    
+	};	
 	window.Rasengan=Rasengan;
 })(window,document);
