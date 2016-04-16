@@ -1,3 +1,5 @@
+/**We Can Also Integrate Eviction Policy For Old Messages And When Subscriber Subscribe For The First Time It Will Also
+ * Get The Old Messages.Like In Java Messaging Service We Have Store & Forward(Durable)*/
 var PubSubModule=(function(){
 	var Topics={Data:{}};
 	return{
