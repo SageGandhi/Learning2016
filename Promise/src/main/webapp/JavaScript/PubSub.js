@@ -32,7 +32,8 @@ var SubscriptionFirst=PubSubModule.Subscribe('ChannelFirst',function(Topic,Data)
 });
 PubSubModule.Publish('ChannelFirst',{Data:'Any Data To Be Provided ChannelFirst'});
 PubSubModule.Publish('ChannelSecond',{Data:'Any Data To Be Provided ChannelSecond'});
-SubscriptionFirst.UnSubscribe();SubscriptionSecond.UnSubscribe();
+SubscriptionFirst.UnSubscribe();
+SubscriptionSecond.UnSubscribe();
 /**Observer Pattern**/
 function Observer(){this.HandlerChain=[];}
 Observer.prototype.Subscribe=function(Fn){this.HandlerChain.push(Fn);};
