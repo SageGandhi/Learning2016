@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">h4{font-weight:bold;color:green;}span{color:red;}</style>
+<title>See Js Ordering Due To Define To Be Defined First</title>
+<script type="text/javascript" src="BaseRequire.js"></script>
+<script type="text/javascript" src="Batman.js"></script>
+<script type="text/javascript" src="Dwarf.js"></script>
+<script type="text/javascript" src="Joker.js"></script>
+<script type="text/javascript" src="MrRobot.js"></script>
+<script type="text/javascript" src="Main.js"></script>
+</head>
+<body>
+<h4>See Js Ordering Due To Define/Require To Be Defined First.Why Using Factory??Because By Wrapping The Module Definitions In Factory Functions,
+The Module Code Is Parsed/Interpreted<span>(In A Naive Way,Javascript Is Not Interpreted Rather A 2 Pass Compiling Like Behavior)</span>,But Not Executed When 
+The File Is Downloaded.The Factory Function Is Only Executed When You Make The Require Call.<span>There Are Still Lots Of BoilerPlate Code,Because We Did Not Consider 
+The Dependency Chain.</span>
+</h4>
+</body>
+</html>

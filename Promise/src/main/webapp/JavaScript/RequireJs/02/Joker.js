@@ -1,0 +1,1 @@
+Define('Joker',function(){console.log('Returns Factory Joker');var Joker=function(){console.log(["Joker:Do I really look like a guy with a plan?"]);};return Joker;});

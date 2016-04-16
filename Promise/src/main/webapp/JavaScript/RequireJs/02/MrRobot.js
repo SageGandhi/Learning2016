@@ -1,0 +1,1 @@
+Define('MrRobot',function(){console.log('Returns Factory MrRobot');var MrRobot=function(){console.log(["MrRobot:Every hacker loves attention."]);};return MrRobot;});
