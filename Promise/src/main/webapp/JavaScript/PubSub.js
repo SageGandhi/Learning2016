@@ -31,3 +31,12 @@ var SubscriptionFirst=PubSubModule.Subscribe('ChannelFirst',function(Topic,Data)
 PubSubModule.Publish('ChannelFirst',{Data:'Any Data To Be Provided ChannelFirst'});
 PubSubModule.Publish('ChannelSecond',{Data:'Any Data To Be Provided ChannelSecond'});
 SubscriptionFirst.UnSubscribe();SubscriptionSecond.UnSubscribe();
+/**Observer Pattern**/
+function Observer(){this.HandlerChain=[];}
+Observer.prototype.Subscribe=function(Fn){this.HandlerChain.push(Fn);};
+Observer.prototype.UnSubscribe=function(Fn){this.HandlerChain=this.HandlerChain.filter(function(EachFn){if(EachFn!==Fn){return EachFn;}})};
+Observer.prototype.Trigger=function(Event,Scope){Scope=Scope||window;this.HandlerChain.forEach(function(Fn){Fn.call(Scope,Event);});};
+var Log=(function(){var Msg="";return{Add:function(Arg){ Msg+=Arg+"\n";},Display:function(){console.log(Msg);Msg="";}}}());
+var Handler=function(EventData){Log.Add("Fired:"+JSON.stringify(EventData));};
+var Obsrvr=new Observer();Obsrvr.Subscribe(Handler);Obsrvr.Trigger('Event007');Obsrvr.UnSubscribe(Handler);
+Obsrvr.Trigger('Event008');Obsrvr.Subscribe(Handler);Obsrvr.Trigger('Event009');Obsrvr.UnSubscribe(Handler);Log.Display();
