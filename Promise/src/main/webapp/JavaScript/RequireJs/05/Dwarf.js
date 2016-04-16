@@ -1,0 +1,1 @@
+Define('Dwarf',function(){console.log('Returns Factory Dwarf');var Dwarf=function(){console.log(["Tyrion:It's not easy being drunk all the time. If it were easy, everyone would do it."]);};return Dwarf;});
