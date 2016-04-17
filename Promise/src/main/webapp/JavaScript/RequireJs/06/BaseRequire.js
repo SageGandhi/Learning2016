@@ -25,12 +25,7 @@ function Require(NamesArray,CallBackForModuleFactory){/**Just Look Up The Regist
 		/**Simple Way To Get Values As Array From Specific Key Array,Passing Array,Have To Use Apply,
 		 * Context Is Window Global Object,Check CallBackForModuleFactory Is Function Or Not*/
 		if(CallBackForModuleFactory&&{}.toString.call(CallBackForModuleFactory)==='[object Function]'){
-			CallBackForModuleFactory.apply(this,NamesArray.map(function(ModuleKey){return ModuleStorage[ModuleKey]();}));
-			if(this.console&&console.dir){
-				console.dir(this);console.dir(NamesArray.map(function(ModuleKey){
-					return ModuleStorage[ModuleKey]();
-				}));
-			}
+			CallBackForModuleFactory.apply(this,NamesArray.map(function(ModuleKey){return ModuleStorage[ModuleKey]();}));			
 		}
 	}
 }
