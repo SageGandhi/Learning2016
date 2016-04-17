@@ -1,0 +1,1 @@
+requirejs.config({baseUrl:'.'});requirejs(["Main"]);define(function(require){var messages=require('Message'),print=require('Print');print(messages.getHello());});

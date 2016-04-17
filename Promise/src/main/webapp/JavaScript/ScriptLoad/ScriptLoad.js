@@ -27,7 +27,5 @@ function LoadingScript(Url,CallBack){
 	}
 	ElmScript.src=Url;document.body.appendChild(ElmScript);
 }
-
-var GlobalLoadingUrls=['https://code.jquery.com/jquery-2.2.3.js','https://code.jquery.com/jquery-migrate-1.4.0.js',
-                      'https://code.jquery.com/jquery-1.12.3.js','https://code.jquery.com/ui/1.11.4/jquery-ui.js'];
+var GlobalLoadingUrls=['https://code.jquery.com/jquery-2.2.3.js','https://code.jquery.com/jquery-migrate-1.4.0.js','https://code.jquery.com/jquery-1.12.3.js','https://code.jquery.com/ui/1.11.4/jquery-ui.js'];
 while(GlobalLoadingUrls.length)LoadingScript(GlobalLoadingUrls.shift(),LogMsg);

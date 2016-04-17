@@ -1,0 +1,1 @@
+define(function(){return function Print(Msg){console.log(Msg);};});
