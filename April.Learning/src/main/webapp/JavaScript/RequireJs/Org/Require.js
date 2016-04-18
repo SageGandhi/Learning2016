@@ -1,4 +1,4 @@
-/**Vim(VisualEditorImproved):TabStop=4,SoftTabStop=4,ShiftWidth=4,ExpandTab=4*/
+/**Vim(VisualEditorImproved):TabStop(Width Of A Tab Character)=4,SoftTabStop=4,ShiftWidth=4,ExpandTab(Spaces To Be Used Instead Of Tab Character,Spaces Expands To A Tab Character)=4*/
 //Not using strict: uneven strict support in browsers, #392, and causes
 //problems with requirejs.exec()/transpiler plugins that may not be strict.
 /*jslint regexp: true, nomen: true, sloppy: true */
