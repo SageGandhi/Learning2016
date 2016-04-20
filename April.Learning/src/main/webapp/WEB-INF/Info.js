@@ -11,4 +11,5 @@
  * The Statement Above That . Matches Any Character Is A Simplification For Pedagogical Purposes That Is Not Strictly True.Dot Matches Any Character Except Newline,"\n",
  * But In Practice You Rarely Expect A Pattern Such As .+ To Cross A Newline Boundary.Perl Regexes Have A /s Switch & Java Pattern.DOTALL.Ex,To Make . Match Any Character 
  * At All.For Languages That Don't Have Such A Feature,You Can Use Something Like [\s\S] To Match "Any Whitespace | Any Non-Whitespace",In Other Words Anything.*/
-/** Vim(VisualEditorImproved):TabStop=4,SoftTabStop=4,ShiftWidth=4,ExpandTab=4 */
+/** Vim(VisualEditorImproved):TabStop=4,SoftTabStop=4,ShiftWidth=4,ExpandTab=4.Modern Browser According To British Broadcasting Company(document.querySelector/
+ * document.querySelectorAll/Window.addEventListener/Storage(LocalStorage,SessionStorage)).*/
