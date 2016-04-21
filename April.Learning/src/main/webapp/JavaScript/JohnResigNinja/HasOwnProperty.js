@@ -73,7 +73,9 @@ AbstractExecutionContextMandatedProperties={
 		"VariableObject":"A Variable Object Is A Container Of Data Associated With The Execution Context.It’S A Special Object That Stores Variables And Function " +
 		"Declarations(Not Functional Expression) Defined In The Context. In The Global Context The Variable Object Is The Global Object Itself (That’S Why We Have An " +
 		"Ability To Refer Global Variables Via Property Names Of The Global Object).Function Expression Is Not Included Into The Variable Object. That’S Why We Have A " +
-		"ReferenceError When Trying To Access It Outside The Function Itself.",
+		"ReferenceError When Trying To Access It Outside The Function Itself.Using Eval We Also Enter A New (Eval’S) Execution Context. However, Eval Uses Either Global’s " +
+		"Variable Object, Or A Variable Object Of The Caller(A Function From Which Eval Is Called).And What About Functions And Their Variable Objects? In A Function " +
+		"Context, A Variable Object Is Presented As An Activation Object.",
 		"ScopeChain":"",
 		"ThisValue":"ContextObject('[this]')"
 };
