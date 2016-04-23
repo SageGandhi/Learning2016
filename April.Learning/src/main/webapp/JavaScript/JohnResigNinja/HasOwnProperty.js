@@ -69,6 +69,28 @@ PrajitExt.__proto__.__proto__===Object.prototype,']','[PrajitExt.__proto__.__pro
   After The Initialization Is Done, The Runtime System Is Waiting For Some Event (User’S Mouse Click) Which Will Activate Some Function And Which Will Enter A New 
   Execution Context.Having Some Function Context As [Execution Context Pushed(Active)] And The Global Context As [Global Execution Context], We Have The Following Stack 
   Modification On Entering And Exiting [Execution Context Pushed(Active)] From The Global Context:Object Structure&Properties(State)For Each Execution Context Having:*/
+var FirstGlobalInt=10;function FunctionDeclaration(){}(function FunctionExpression(){});
+console.log('[this.FirstGlobalInt===FirstGlobalInt:',this.FirstGlobalInt===FirstGlobalInt,']','[window.FunctionDeclaration===FunctionDeclaration:',
+		window.FunctionDeclaration===FunctionDeclaration,']');console.log(FunctionExpression);console.log(window.FunctionExpression);
+/**Execution Context(Abbreviated Form—EC)Is The Abstract Concept Used By ECMA-262 Specification For Typification And Differentiation Of An Executable Code.Execution Context 
+   Stack Works Like A Stack,Pushing Context When New Active Context Arrives,Pop Context When Active Context Finished/Thorw An Error.Reading JavaScript Source File From 
+   External Source/Inline JavaScript Create Global Context(Global Code Does Not Include Any Parts Of Code Which Are In Bodies Of Function)*/
+ExecutionContextStack=[/**Initially Empty*/];/**For Global Code*/
+ExecutionContextStack=["GlobalExecutionContext"];/**The Code Of Concrete Function Does Not Include Codes Of The Inner Functions.*/
+(function Example(Flag){if(Flag){return;}Example(true);})(false);/**ExecutionContextStack Modifies As First Invokation/Activation Of Example Function*/
+ExecutionContextStack=["<Example>FunctionContext","GlobalExecutionContext"];/**Recursive Activation Of Example Function*/
+ExecutionContextStack=["<Example>FunctionContext","<Example>FunctionContext","GlobalExecutionContext"];/**Throwing Error But Not Caught Error Can Cause Popping One Or More 
+Execution Context*/
+(function First(){(function Second(){throw 'Exit From Second & First ExecutionContexts';})();})();/**Eval Influence The Calling Context,Context From Where Eval Is Being Called*/
+eval('var GlobalVariable=10');(function First(){/**Variable LocalVariable Is Created In The Local Context Of "First" Function*/eval('var LocalVariable=20');})();
+console.log(GlobalVariable);console.log(LocalVariable);/**10|Undefined*//**Strict-Mode Of Es5, Eval Already Does Not Influence The Calling Context, But Instead 
+Evaluates The Code In The Local Sandbox.ExecutionContextStack Modifies As Follows*/
+ExecutionContextStack=["GlobalExecutionContext"];/**Influence Global Context*/
+ExecutionContextStack=[{"Context":"EvalContext","CallingContext":"GlobalContext"},"GlobalExecutionContext"];
+ExecutionContextStack=["GlobalExecutionContext"];ExecutionContextStack=["<First>FunctionContext","GlobalExecutionContext"];
+ExecutionContextStack=[{"Context":"EvalContext","CallingContext":"<First>FunctionContext"},"<First>FunctionContext","GlobalExecutionContext"];
+/**Global Context Corresponds To Evaluation Of The Script. Every Script Tag Enters Its Own Global Execution Context And Is Treated As Separate Program. However,
+All Of These Scripts Are Share The Same Global Object.*/
 AbstractExecutionContextMandatedProperties={
 		"VariableObject":"A Variable Object Is A Container Of Data Associated With The Execution Context.It’S A Special Object That Stores Variables And Function " +
 		"Declarations(Not Functional Expression) Defined In The Context. In The Global Context The Variable Object Is The Global Object Itself (That’S Why We Have An " +
@@ -79,6 +101,76 @@ AbstractExecutionContextMandatedProperties={
 		"ScopeChain":"",
 		"ThisValue":"ContextObject('[this]')"
 };
-var FirstGlobalInt=10;function FunctionDeclaration(){}(function FunctionExpression(){});
-console.log('[this.FirstGlobalInt===FirstGlobalInt:',this.FirstGlobalInt===FirstGlobalInt,']','[window.FunctionDeclaration===FunctionDeclaration:',
-		window.FunctionDeclaration===FunctionDeclaration,']');console.log(FunctionExpression);console.log(window.FunctionExpression);
+/**VariableObject:A Variable Object (In Abbreviated Form — Vo)Is A Special Object Related With An Execution Context And Which Stores:Variables (Var,VariableDeclaration);
+Function Declarations (FunctionDeclaration, In Abbreviated Form Fd);And Function Formal Parameters Declared In The Context.*/
+ActiveExecutionContext={Vo:{"Has":"Variables (Var,VariableDeclaration);Function Declarations (FunctionDeclaration, In Abbreviated Form Fd);And Function Formal Parameters"}};
+/**Indirect Referencing To Variables (Via Property Names Of Vo) Allows Only Variable Object Of The Global Context (Where The Global Object Is Itself The Variable Object). 
+For Other Contexts Directly To Reference The Vo Is Not Possible, It Is Purely Mechanism Of Implementation.*/
+var FirstGlobalVar=10;function FirstGlobalFunc(FuncArgs){var FuncLocalVar=20;};FirstGlobalFunc(50);
+/**Variable Object Of The Global Context:Vo(globalContext)={FirstGlobalVar:10,FirstGlobalFunc:<Reference To Function>};|Variable Object Of The "FirstGlobalFunc" Function 
+ * Context:Vo(FirstGlobalFunc FunctionContext)={FuncArgs:30,FuncLocalVar:20};|But At Implementation Level (And Specification) The Variable Object Is An Abstract Essence.
+ * Physically, In Concrete Execution Contexts, Vo Is Named Differently And Has Different Initial Structure.|Global Object Is The Object Which Is Created Before Entering Any 
+ * Execution Context; This Object Exists In The Single Copy, Its Properties Are Accessible From Any Place Of The Program, The Life Cycle Of The Global Object Ends With 
+ * Program End.*/
+Global={Math:"Math(Property&Function)Definition",String:"String(Property&Function)Definition",Window:Global};
+/**Variable Object Of The Global Context — Here Variable Object Is The Global Object Itself:It Is Necessary To Understand Accurately This Fact Since For This Reason 
+ Declaring A Variable In The Global Context, We Have Ability To Reference It Indirectly Via Property Of The Global Object (For Ex.When The Variable Name Is Unknown 
+ In Advance):*/
+/**Regarding The Execution Context Of Functions—There Vo Is Inaccessible Directly,And Its Role Plays So-Called An Activation Object (In Abbreviated Form—Ao).
+ * Vo(FunctionContext)===Ao;An Activation Object Is Created On Entering The Context Of A Function And Initialized By Property Arguments Which Value Is The Arguments Object:
+ * Ao={arguments:<Argments>};Arguments Object Is A Property Of The Activation Object. It Contains The Following Properties:Callee — The Reference To The Current Function;
+ * Length — Quantity Of Real Passed Arguments;Properties-Indexes (Integer, Converted To String) Which Values Are The Values Of Function’S Arguments (From Left To Right In 
+ * The List Of Arguments). Quantity Of These Properties-Indexes == Arguments.Length. Values Of Properties-Indexes Of The Arguments Object And Present (Really Passed) Formal 
+ * Parameters Are Shared.*/
+(function SampleFunc(_$1,_$2,_$3){/**Quantity Of Defined Function Arguments(_$1,_$2,_$3)*/console.log("SampleFunc.length[3]:",SampleFunc.length);
+	  /**Quantity Of Really Passed Arguments(Only _$1,_$2)*/console.log("arguments.length[2]:",arguments.length);
+	  /**Reference Of A Function To Itself*/console.log("arguments.callee===SampleFunc[true]:",arguments.callee===SampleFunc);
+	  /**Parameters Sharing*/console.log("_$1===arguments[0][true]:",_$1===arguments[0]);console.log("_$1[10]:",_$1);arguments[0]=20;console.log("_$1[20]:",_$1);
+	  _$1=30;console.log("arguments[0][30]:",arguments[0]);/**However, For Not Passed Argument _$3,Related Index-Property Of The Arguments Object Is Not Shared*/
+	  _$3=40;console.log("arguments[2][undefined]:",arguments[2]);arguments[2]=50;console.log("_$3[40]:",_$3);	  
+})(10,20);
+/**Processing Of The Execution Context Code Is Divided On Two Basic Stages:1)Entering The Execution Context;2)Code Execution.Modifications Of The Variable Object Are 
+ * Closely Related With These Two Phases.That Processing Of These Two Stages Are The General Behavior And Independent From The Type Of The Context (Fair For Both:
+ * Global And Function Contexts).*/
+/**Entering The Execution Context:On Entering The Execution Context (But Before The Code Execution), Vo Is Filled With The Following Properties:
+For Each Formal Parameter Of A Function (If We Are In Function Execution Context)— A Property Of The Variable Object With A Name And Value Of Formal Parameter Is Created;
+For Not Passed Parameters — Property Of Vo With A Name Of Formal Parameter And Value Undefined Is Created;
+For Each Function Declaration (FunctionDeclaration)— A Property Of The Variable Object With A Name And Value Of A Function-Object Is Created; If The Variable Object 
+Already Contains A Property With The Same Name, Replace Its Value And Attributes;
+For Each Variable Declaration(Var,VariableDeclaration)— A Property Of The Variable Object With A Variable Name And Value Undefined Is Created; If The Variable Name Is The 
+Same As A Name Of Already Declared Formal Parameter Or A Function, The Variable Declaration Does Not Disturb The Existing Property.*/
+(function ExecContext(_$1,_$2){
+	var Local$01=10;/**VariableDeclaration*/function Local$02(){}/**FunctionDeclaration*/
+	var Local$03=function Local$04(){};/**VariableDeclaration|FunctionExpression*/(function Local$05(){});/**FunctionExpression*/
+})(10);
+Ao["ExecContext"]={_$1:10,_$2:undefined,Local$01:undefined,Local$02:"Reference To FunctionDeclaration Local$02",Local$03:undefined};
+/**CodeExecutionPhase:&Example*/
+Ao["ExecContext"]={_$1:10,_$2:undefined,Local$01:10,Local$02:"Reference To FunctionDeclaration Local$02",Local$03:"Reference To FunctionDeclaration Local$04"};
+console.log("Function",AnyVar);var AnyVar=10;console.log("10",AnyVar);AnyVar=20;function AnyVar(){}console.log("20",AnyVar);
+/**Entering The Execution Context*/Ao["AnyVarInGlobalContext"]={AnyVar:"Reference To FunctionDeclaration AnyVar"}
+/**Entering The Execution Context Do Following Steps In Order:1)Formal Parameter Of A Function|2)For Each Function Declaration|3)Each Variable Declaration(If The Variable 
+ * Name Is The Same As A Name Of Already Declared Formal Parameter Or A Function, The Variable Declaration Does Not Disturb The Existing Property).So Function Value Retained.*/ 
+Ao["AnyVarInGlobalContext"]={};Ao["AnyVarInGlobalContext"]={AnyVar:"Reference To FunctionDeclaration AnyVar"};
+/**Found AnyVar=10,But As Rule Says Above Not Changes Its Value & Still A Function*//**CodeExecutionPhase:*/
+/**Found AnyVar=10*/Ao["AnyVarInGlobalContext"]={AnyVar:10};/**Found AnyVar=20*/Ao["AnyVarInGlobalContext"]={AnyVar:20}
+/**Undefined,But Not "_$2 Is Not Defined",Already Defined With Undefined Value In Entering The Execution Context Phase.But CodeExecutionPhase Never Occur*/
+if(true){var _$1=1;}else{var _$2=2;}
+/**Claim:“It Is Possible To Declare Global Variables Using Var Keyword (In The Global Context) And Without Using Var Keyword (In Any Place)”. It Is Not So.Remember:Variables 
+Are Declared Only With Using Var Keyword.Just Create The New Property (But Not The Variable) Of The Global Object. “Not The Variable” Is Not In The Sense That It Cannot Be 
+Changed, But “Not The Variable” In Concept Of Variables In EcmaScript (Which Then Also Become Properties Of The Global Object Because Of Vo(GlobalContext)===Global.*/
+AnyVarDeclInGlobalScope=10;/**A Property In GlobalContext===In Global Object,So We Can Access,See Reason Mentioned Above*/
+console.log(AnyVar01);/**Undefined When Executing*/console.log(AnyVar02);/**AnyVar02 Is Not Defined As It Is Without Var Declaration*/AnyVar02=10;var AnyVar01=20;
+console.log(AnyVar01);/**Undefined When Executing*/AnyVar02=10;console.log(AnyVar02);/**AnyVar02 Is Defined In Execution Phase*/var AnyVar01=20;console.log(AnyVar01);
+/**There Is One More Important Point Concerning Variables,Variables,In Contrast With Simple Properties,Have Attribute {DontDelete},Meaning Impossibility To Remove A 
+Variable Via The Delete Operator:ES5{DontDelete} Is Renamed Into The [[Configurable]] And Can Be Manually Managed Via Object.DefineProperty Method.*/
+AnyVar03=10;console.log("10:",window.AnyVar03);console.log("True:",delete AnyVar03);/**Property Can Be Deletable*/console.log("Undefined",window.AnyVar03);
+var AnyVar04=10;console.log("10:",window.AnyVar04);console.log("False:",delete AnyVar04);/**Variables Can't Be Deletable*/console.log("10",window.AnyVar04);
+/**this Is A Property Of The Execution Context. It’S A Special Object In Which Context A Code Is Executed.this Is Directly Related To The Type Of Executable Code Of The 
+ * Context. The Value Is Determined On Entering The Context And Is Immutable While The Code Is Running In The Context.*/
+ActiveExecutionContext={Vo:"VariableObject",this: "thisValue"};
+/**In The Global Code, This Value Is Always The Global Object Itself.It Is Possible To Reference It Indirectly:*/
+/**Explicit Property Definition Of The Global Object:Window.AnyVar$1*/this.AnyVar$1=10;console.log("10",AnyVar$1);
+/**Implicit Definition Via Assigning To Unqualified Identifier*/AnyVar$2=20;console.log("20",this.AnyVar$1);
+/**Also Implicit Via Variable Declaration Because Variable Object Of The Global Context Is The Global Object Itself*/var AnyVar$3=30;console.log("30",this.AnyVar$3);
+var Foo={AnyVar$1:10},Bar={AnyVar$1:20,AnyVar$1Test:function(){console.log("True",this===Bar);console.log("20",this.AnyVar$1);console.log("20",this.AnyVar$1);}};
+Bar.AnyVar$1Test();/**this Is Bar Object*/Foo.AnyVar$1Test=Bar.AnyVar$1Test;/**this Will Refer To Foo,Although We Are Calling Same Function*/Foo.AnyVar$1Test();
