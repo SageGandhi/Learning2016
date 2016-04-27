@@ -174,3 +174,115 @@ ActiveExecutionContext={Vo:"VariableObject",this: "thisValue"};
 /**Also Implicit Via Variable Declaration Because Variable Object Of The Global Context Is The Global Object Itself*/var AnyVar$3=30;console.log("30",this.AnyVar$3);
 var Foo={AnyVar$1:10},Bar={AnyVar$1:20,AnyVar$1Test:function(){console.log("True",this===Bar);console.log("20",this.AnyVar$1);console.log("20",this.AnyVar$1);}};
 Bar.AnyVar$1Test();/**this Is Bar Object*/Foo.AnyVar$1Test=Bar.AnyVar$1Test;/**this Will Refer To Foo,Although We Are Calling Same Function*/Foo.AnyVar$1Test();
+/**The First (And, Probably, The Main) Feature Of this Value In This Type Of Code Is That Here It Is Not Statically Bound To A Function.this Value Is Determined On 
+Entering The Context, And In Case With A Function Code The Value Can Be Absolutely Different Every Time.First, In A Usual Function Call, this Is Provided By The Caller 
+Which Activates The Code Of The Context,The Parent Context Which Calls The Function. And The Value Of this Is Determined By The Form Of A Call Expression (In Other Words 
+By The Form How Syntactically The Function Is Called).*/function GlobalFunction$1(){console.dir(this);}GlobalFunction$1();/**Global(this)*/
+console.log(GlobalFunction$1===GlobalFunction$1.prototype.constructor);/**With Another Form Of The Call Expression Of The Same Function,this Value Is Different*/
+GlobalFunction$1.prototype.constructor();/**GlobalFunction$1.prototype*/
+var Global$1={Function$1:function(){console.dir(this);console.log(this===Global$1);}};Global$1.Function$1();var GlobalFunction$2=Global$1.Function$1;
+console.log("True:",GlobalFunction$2===Global$1.Function$1);/**With Another Form Of The Call Expression Of The Same Function,Have Different this Value*/GlobalFunction$2();
+/**Internal Reference Type UnderStanding:Needed When Deal With An Identifier(Done By ScopeChain:Identifier Resolution)/Property Accessor*/
+var ValueOfReferenceType={Base:"Object To Which Property Belongs",PropertyName:"Name Of The Property In This Base."};
+/**ScopeChain:Is Known That Every Context Has Its Own Variables Object:For The Global Context It Is Global Object Itself,For Functions It Is The Activation Object.And The 
+ * Scope Chain Is Exactly This List Of All (Parent) Variable Objects For The Inner Contexts. This Chain Is Used For Variables Lookup.Scope Chain Of “Bar” Context Includes 
+ * ActivationObejct(Bar),ActivationObejct(Foo) And VariableObject(Global).Scope Chain Is Related With An Execution Context A Chain Of Variable Objects Which Is Used For 
+ * Variables Lookup At Identifier Resolution.The Scope Chain Of A Function Context Is Created At Function Call And Consists Of The Activation Object And The Internal 
+ * [[Scope]] Property Of This Function.*/
+ActiveExecutionContext={VoAo:"VariableObjectOrActivationObject",this:"ThisValue",Scope:[/**Scope Chain List Of All Variable Objects For Identifiers Lookup&Resolution*/]};
+var $Global01=10;function Foo(){var $Local02=20;function Bar(){console.log($Global01+$Local02);}return Bar;}Foo()();
+/**FunctionLifeCycle:(Stage Of Creation & Stage Of Activation(Call))|Definition Of Scope:Scope=ActivationObject+[[Scope]],Represented As Array[<<(Activation|Variable)Object>>,...],
+ Or May Be Hierarchical var VariableObject$1={__Parent__:null,...<<Data>>},VariableObject$2={__Parent__:VariableObject$1,...<<Data>>},...;.Function Declarations Are Put Into 
+ Variable/Activation Object On Entering The Context Stage.A Variable And A Function Declaration In The Global Context (Where Variable Object Is The Global Object Itself:*/
+var $Global03=10;function $GloblFunc01(){var $Local01=20;console.log($Local01+$Global03);}$GloblFunc01();
+/**Before This Moment We Spoke Only About Variable Object Of The Current Context.Here We See That “$Local01” Variable Is Defined In Function “$GloblFunc01” (Which Means It 
+ * Is In The ActivationObject Of “$GloblFunc01” Context), But Variable “$Global03” Is Not Defined In Context Of “$GloblFunc01” And Accordingly Is Not Added Into The 
+ * ActivationObject Of “$GloblFunc01”.At First Glance “$Global03” Variable Does Not Exist At All For Function “$GloblFunc01”; Only “At First Glance”. The Activation Object 
+ * Of “$GloblFunc01” Context Contains Only One Property — Property “$Local01”:*/
+$GloblFunc01.ActivationObject={$Local01:undefined/**Undefined–On Entering The Context,20–At Activation*/};
+/**How Does Function “$GloblFunc01” Have Access To “$Global03” Variable?It Is Logical To Assume That Function Should Have Access To The Variable Object Of A Higher Context.
+ *In Effect,It Is Exactly So And, Physically This Mechanism Is Implemented Via The Internal [[Scope]] Property Of A Function.[[Scope]] Is A Hierarchical Chain Of All Parent 
+ *Variable Objects, Which Are Above The Current Function Context; The Chain Is Saved To The Function At Its Creation.[[Scope]] Is Saved At Function Creation — Statically
+ *(Always),Once And Forever—Until Function Destruction.Function Can Be Never Called,But [[Scope]] Property Is Already Written And Stored In Function Object.Another Moment 
+ *Which Should Be Considered Is That [[Scope]]In Contrast With Scope (Scope Chain) Is The Property Of A Function Instead Of A Context. Above Example, [[Scope]] Of The 
+ *“$GloblFunc01” Function Is The Following:*/$GloblFunc01["[[Scope]]"]=[GlobalContext.VariableObject/**Global*/];
+/**As It Has Been Said In Definition,On Entering The Context And After Creation Of ActivationObject/VariableObject,Scope Property Of The Context(Which Is A Scope Chain For 
+ * Variables Lookup)Is Defined As Follows:Scope=ActivationObject/VariableObject+[[Scope Property Of A Function]].The Activation Object Is The First Element Of The Scope 
+ * Array,Added To The Front Of Scope Chain:Scope=[ActivationObject].Concat([[Scope]]);Process Of Identifier Resolution:Identifier Resolution Is A Process Of Determination 
+ * To Which Variable Object In Scope Chain The Variable (Or The Function Declaration) Belongs.On Return From This Algorithm We Have Always A Value Of Type Reference, Which 
+ * Base Component Is The Corresponding Variable Object (Or Null If Variable Is Not Found), And A Property Name Component Is The Name Of The Looked Up (Resolved) Identifier.*/
+ ValueOfReferenceType={Base:"Object To Which Property Belongs",PropertyName:"Name Of The Property In This Base."};
+ /**This Process Of Identifier Resolution Includes Lookup Of The Property Corresponding To The Name Of The Variable,There Is A Consecutive Examination Of Variable Objects 
+  * In The Scope Chain, Starting From The Deepest Context And Up To The Top Of The Scope Chain.Thus, Local Variables Of A Context At Lookup Have Higher Priority Than 
+  * Variables From Parent Contexts, And In Case Of Two Variables With The Same Name But From Different Contexts, The First Is Found The Variable Of Deeper Context.*/
+ var GlobalVar$1=10;
+ function GlobalFunc$1(){var LocalGlobalFunc$1=20;function InnerFunc$1(){var LocalInnerFunc$1=30;console.log(LocalInnerFunc$1+LocalGlobalFunc$1+GlobalVar$1);}InnerFunc$1();}
+ GlobalFunc$1();
+/**The Following Variable/Activation Objects,[[Scope]] Properties Of Functions And Scope Chains Of Contexts:*/
+/**Variable Object Of The Global Context Is:*/
+ GlobalContext.VariableObject={GlobalVar$1:10,GlobalFunc$1:"Refererence To GlobalFunc$1"}
+/**At GlobalFunc$1 Creation,The [[Scope]] Property Of GlobalFunc$1 Is:*/
+ GlobalFunc$1["[[Scope]]"]=[GlobalContext.VariableObject];/**All Parent Context VariableObject|ActivationObject*/
+ /**At GlobalFunc$1 Call,The Activation Context Of GlobalFunc$1 Is:*/
+ GlobalFunc$1["ActivationObject"]={LocalGlobalFunc$1:20,InnerFunc$1:"Refererence To InnerFunc$1"};
+ /**At GlobalFunc$1,On Entering The Context And After Creation Of ActivationObject/VariableObject,Scope Property Of The Context For GlobalFunc$1:*/
+ GlobalFunc$1["ScopeChain"]=GlobalFunc$1["ActivationObject"]+GlobalFunc$1["[[Scope]]"];
+ GlobalFunc$1["ScopeChain"]=[GlobalFunc$1["ActivationObject"],GlobalFunc$1["[[Scope]]"]];
+ GlobalFunc$1["ScopeChain"]=[{LocalGlobalFunc$1:20,InnerFunc$1:"Refererence To InnerFunc$1"},GlobalContext.VariableObject];
+ GlobalFunc$1["ScopeChain"]=[{LocalGlobalFunc$1:20,InnerFunc$1:"Refererence To InnerFunc$1"},{GlobalVar$1:10,GlobalFunc$1:"Refererence To GlobalFunc$1"}];
+ /**At InnerFunc$1 Creation,The [[Scope]] Property Of InnerFunc$1 Is:*/
+ InnerFunc$1["[[Scope]]"]=[GlobalFunc$1.ActivationObject,GlobalContext.VariableObject];/**All Parent Context VariableObject|ActivationObject*/
+ /**At InnerFunc$1 Call,The Activation Context Of InnerFunc$1 Is:*/
+ InnerFunc$1["ActivationObject"]={LocalInnerFunc$1:30};
+ /**At InnerFunc$1,On Entering The Context And After Creation Of ActivationObject/VariableObject,Scope Property Of The Context For InnerFunc$1:*/
+ InnerFunc$1["ScopeChain"]=InnerFunc$1["ActivationObject"]+InnerFunc$1["[[Scope]]"];
+ InnerFunc$1["ScopeChain"]=[{LocalInnerFunc$1:30},GlobalFunc$1.ActivationObject,GlobalContext.VariableObject];
+ InnerFunc$1["ScopeChain"]=[{LocalInnerFunc$1:30},{LocalGlobalFunc$1:20,InnerFunc$1:"Refererence To InnerFunc$1"},{GlobalVar$1:10,GlobalFunc$1:"Refererence To GlobalFunc$1"}];
+ /**IdentiferResolution Becomes Simple:GlobalVar$1-->InnerFunc$1["ScopeChain"]-->InnerFunc$1["ActivationObject"]:NotFound+InnerFunc$1["[[Scope]]"]-->Find In InnerFunc$1["[[Scope]]"]
+  * -->GlobalFunc$1.ActivationObject,GlobalContext.VariableObject-->{LocalGlobalFunc$1:20,InnerFunc$1:"Refererence To InnerFunc$1"}:NotFound+GlobalContext.VariableObject-->
+  * Find In GlobalContext.VariableObject-->{GlobalVar$1:10,GlobalFunc$1:"Refererence To GlobalFunc$1"}:Found(10)*/
+ /**Closures In EcmaScript Are Directly Related With The [[Scope]] Property Of Functions.As It Has Been Noted, [[Scope]] Is Saved At Function Creation And Exists Until The 
+  * Function Object Is Destroyed. Actually, A Closure Is Exactly A Combination Of A Function Code And Its [[Scope]] Property.Thus,[[Scope]] Contains That Lexical Environment 
+  * (The Parent Variable Object) In Which Function Is Created. Variables From Higher Contexts At The Further Function ActivationObject Will Be Searched In This Lexical (
+  * Statically Saved At Creation) Chain Of Variable Objects.GlobalVar$4 Variable Is Found In The [[Scope]] Of Example$1 Function,For Variables Lookup The Lexical(Closured) 
+  * Chain Defined At The Moment Of Function Creation, But Not The Dynamic Chain Of The Call (At Which Value Of GlobalVar$4 Variable Would Be Resolved To 20) Is Used.*/
+var GlobalVar$4=10;function Example$1(){console.log(GlobalVar$4);};(function(){var GlobalVar$4=20;Example$1();})();
+ /**Again For The Identifier Resolution The Lexical Scope Chain Defined At Function Creation Is Used — The Variable GlobalVar$5 Is Resolved To 10, But Not To 30. Moreover,
+  * This Example Clearly Shows That [[Scope]] Of A Function (In This Case Of The Anonymous Function Returned From Function Example$2) Continues To Exist Even After The 
+  * Context In Which A Function Is Created Is Already Finished.*/var GlobalVar$5=30;var Example$3=Example$2();Example$3();
+function Example$2(){var GlobalVar$5=10,GlobalVar$6=20;return function(){console.log([GlobalVar$5,GlobalVar$6]);};}
+/**[[Scope]] Of Functions Created Via Function Constructor:In The Examples Below Function At Creation Gets The [[Scope]] Property And Via This Property It Accesses Variables
+Of All Parent Contexts.However,In This Rule There Is One Important Exception, And It Concerns Functions Created Via The Function Constructor.For Function Example$1FuncCons 
+Which Is Created Via The Function Constructor The Variable ExampleLocal$1 Is Not Accessible.But It Does Not Mean That Function BarFn Has No Internal [[Scope]] Property 
+(Else It Would Not Have Access To The Variable ExampleGlobal$1).And The Matter Is That [[Scope]] Property Of Functions Created Via The Function Constructor Contains Always 
+Only The Global Object.Consider It Since, For Example, To Create Closure Of Upper Contexts, Except Global, Via Such Function Is Not Possible.*/
+var ExampleGlobal$1=10;
+(function ExampleGlobalFunc$1(){
+  var ExampleLocal$1=20;
+  function Example$1FunctionDeclaration(){console.log(ExampleGlobal$1);console.log(ExampleLocal$1);}
+  var Example$1FunctionExpression=function(){console.log(ExampleGlobal$1);console.log(ExampleLocal$1);};
+  var Example$1FuncCons=Function('console.log(ExampleGlobal$1);console.log(ExampleLocal$1);');/**FunctionConstructor*/
+  Example$1FunctionDeclaration();Example$1FunctionExpression();Example$1FunctionConstructor();  
+})();
+/**Two-Dimensional Scope Chain Lookup:Also, An Important Point At Lookup In Scope Chain Is That Prototypes (If They Are) Of Variable Objects Can Be Also Considered — Because 
+ * Of Prototypical Nature Of EcmaScript:If Property Is Not Found Directly In The Object, Its Lookup Proceeds In The Prototype Chain.Some Kind Of 2Dimensional-Lookup Of The 
+ * Chain: (1) On Scope Chain Links, (2) And On Every Of Scope Chain Link — Deep Into On Prototype Chain Links.The Scope Chain Of The Global Context Contains Only Global Object.
+ * The Context With Code Type “Eval” Has The Same Scope Chain As A Calling Context.*/GlobalContext.Scope=[Global];EvalContext.Scope===CallingContext.Scope;
+ /**Affecting On Scope Chain During Code Execution:In EcmsScript There Are Two Statements Which Can Modify Scope Chain At Runtime Code Execution Phase.These Are With 
+  * Statement And Catch Clause.Both Of Them Add To The Front Of Scope Chain The Object Required For Lookup Identifiers Appearing Within These Statements.If One Of These 
+  * Case Takes Place, Scope Chain Is Schematically Modified As Follows:*/Scope=WithObject|CatchObject+(ActivationObject|VariableObject)+[[Scope]];
+var With$1={With$1Prop$1:10,With$1Prop$2:20};with(With$1){console.log(With$1Prop$1);console.log(With$1Prop$2);}
+Scope=With$1+(ActivationObject|VariableObject)+[[Scope]];/**ScopeChain Modification*/
+/**On Entering The Context Phase, “With$1Prop$1” And “With$1Prop$2” Identifiers Have Been Added Into The Variable Object.Further,Already At Runtime Code Executions Stage,
+ * Following Modifications Have Been Made:1)With$1Prop$1=10,With$1Prop$2=10;2)The Object{With$1Prop$1: 20} Is Added To The Front Of Scope Chain;3)The Met var Statement 
+ * Inside With, Of Course,Created Nothing, Because All Variables Have Been Parsed And Added On Entering The Context Stage;4)There Is Only Modification Of “With$1Prop$1” 
+ * Value,And Exactly That “With$1Prop$1” Which Is Resolved Now In The Object Added To The Front Of Scope Chain At Second Step; Value Of This “With$1Prop$1” Was 20, And 
+ * Became 30;5)Also There Is Modification Of “With$1Prop$2” Which Is Resolved In Variable Object Above; Accordingly,Was 10,Became 30;6)After With Statement Is Finished, 
+ * Its Special Objects Is Removed From The Scope Chain(And The Changed Value “With$1Prop$1” – 30 Is Removed Also With That Object),Scope Chain Structure Is Restored To 
+ * The Previous State Which Was Before With Statement Augmentation;The Value Of “With$1Prop$1” In Current Variable Object Remains The Same And The Value Of “With$1Prop$2” 
+ * Is Equal Now To 30 And Has Been Changed At With Statement Work.Also,A Catch Clause In Order To Have Access To The Parameter-Exception Creates An Intermediate Scope 
+ * Object With The Only Property—Exception Parameter Name,And Places This Object In Front Of The Scope Chain. Schematically It Looks So:After The Work Of Catch Clause 
+ * Is Finished, Scope Chain Is Also Restored To The Previous State.*/try{}catch(Error){console.log(Error);};CatchObject={Ex:"<Exception Object>"};
+var With$1Prop$1=10,With$1Prop$2=10;with({With$1Prop$1:20}){var With$1Prop$1=30,With$1Prop$2=30;console.log(With$1Prop$1);console.log(With$1Prop$2);}
+console.log(With$1Prop$1);console.log(With$1Prop$2);
+var ValueOfReferenceType={Base:"Object To Which Property Belongs",PropertyName:"Name Of The Property In This Base."};
