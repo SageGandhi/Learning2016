@@ -12,4 +12,33 @@
  * Object Model(Dom)+Browser Object Model(Bom).A Host Environment Provides The Base Implementation Of ECMAScript & Implementation Extensions Designed To Interface With The 
  * Environment Itself.Host Environment Like Browser(ClientSide)/NodeJs(ServerSide)/AdobeFlash.JavaScripts Implements EcmaScript,As Well As Adobe ActionScript.Object Must Be
  * Platform Independent.DOM Was A Need,To Manipulate Dhtml In CrossBrowser Manner.Document|Element|ProcessingInstruction|Comment|DocumentType|DocumentFragment|Text|
- * CDATASection|EntityReference|Attr|Entity|Notation,Node|NodeList(Children Of A Node Ordered List)|NamedNodeMap(ElementsByTagName UnOrder Set Of Nodes)*/
+ * CDATASection|EntityReference|Attr|Entity|Notation,Node|NodeList(Children Of A Node Ordered List)|NamedNodeMap(ElementsByTagName UnOrder Set Of Nodes).Live Copy.Use The 
+ * Method Name "Remove" When The Method Changes The Structural Model, And The Method Name "Delete" When The Method Gets Rid Of Something Inside The Structure Model. The 
+ * Thing That Is Deleted Is Not Returned. The Thing That Is Removed May Be Returned, When It Makes Sense To Return It.When A DocumentFragment Is Inserted Into A Document
+ * (Or Indeed Any Other Node That May Take Children) The Children Of The DocumentFragment And Not The DocumentFragment Itself Are Inserted Into The Node.Document Interface 
+ * Also Contains The Factory Methods Needed To Create These Objects.The Node Objects Created Have A OwnerDocument Attribute Which Associates Them With The Document Within 
+ * Whose Context They Were Created.GetElementsByTagName Returns A NodeList Of All The Element With A Given Tag Name In The Order In Which They Would Be Encountered In A 
+ * Preorder Traversal Of The Document Tree.[DOMString]nodeName;[DOMString]nodeValue;[IntShort]nodeType;[Node]parentNode;NodeList]childNodes;Node]firstChild;Node]lastChild;
+ * [Node]previousSibling;[Node]nextSibling;[NamedNodeMap]attributes;[Document]ownerDocument;[Node]insertBefore([Node]newChild,[Node]refChild);[Node]cloneNode([Boolean] deep);
+ * [Node]replaceChild([Node]newChild,[Node]oldChild);[Node]removeChild([Node]oldChild);[Node]appendChild([Node]newChild);[Boolean]hasChildNodes();
+ * NodeList[[Node]item(Method)];NamedNodeMap[[Node]getNamedItem(DOMString);[Node]setNamedItem([Node]):Taken nodeName;[Node]removeNamedItem(DOMString);[Node]item(Index);]*/
+var NodeType={
+    Element:{NodeType:1,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
+    Attribute:{NodeType:2,Child:[Text,EntityReference]},
+    Text:{NodeType:3,Child:[]},
+    CharacterDataSection:{NodeType:4,Child:[]},
+    EntityReference:{NodeType:5,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
+    Entity:{NodeType:6,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
+    ProcessingInstruction:{NodeType:7,Child:[]},
+    Comment:{NodeType:8,Child:[]},
+    Document:{NodeType:9,Child:[Element,ProcessingInstruction,Comment,DocumentType]},
+    DocumentType:{NodeType:10,Child:[]},
+    DocumentFragment:{NodeType:11,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
+    Notation:{NodeType:12,Child:[]}
+};
+!function(){
+	for(var Internal in document){console.log("Owned Property",document.hasOwnProperty(Internal),":",typeof Internal,":",Internal);}
+	for(var Internal in DOMException){if(/(.)*_ERR/.test(Internal)){console.log(DOMException[Internal],":",Internal);}}
+	console.log(document.getElementsByTagName('body')[0].tagName===document.getElementsByTagName('body')[0].nodeName);
+	console.log(document.doctype,document.documentElement,document.implementation.hasFeature('xml','1.0'),document.getElementsByTagName('*'));
+}();
