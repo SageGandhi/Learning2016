@@ -20,8 +20,9 @@
  * Whose Context They Were Created.GetElementsByTagName Returns A NodeList Of All The Element With A Given Tag Name In The Order In Which They Would Be Encountered In A 
  * Preorder Traversal Of The Document Tree.[DOMString]nodeName;[DOMString]nodeValue;[IntShort]nodeType;[Node]parentNode;NodeList]childNodes;Node]firstChild;Node]lastChild;
  * [Node]previousSibling;[Node]nextSibling;[NamedNodeMap]attributes;[Document]ownerDocument;[Node]insertBefore([Node]newChild,[Node]refChild);[Node]cloneNode([Boolean] deep);
- * [Node]replaceChild([Node]newChild,[Node]oldChild);[Node]removeChild([Node]oldChild);[Node]appendChild([Node]newChild);[Boolean]hasChildNodes();
- * NodeList[[Node]item(Method)];NamedNodeMap[[Node]getNamedItem(DOMString);[Node]setNamedItem([Node]):Taken nodeName;[Node]removeNamedItem(DOMString);[Node]item(Index);]*/
+ * [Node]replaceChild([Node]newChild,[Node]oldChild);[Node]removeChild([Node]oldChild);[Node]appendChild([Node]newChild);[Boolean]hasChildNodes();NodeList[[Node]item(Method)];
+ * NamedNodeMap[[Node]getNamedItem(DOMString);[Node]setNamedItem([Node]):Taken nodeName;[Node]removeNamedItem(DOMString);[Node]item(Index);],CharacterData[[DOMString[data],
+ * [Int length],substringData(offset,count);appendData(DOMString);insertData(offset,DOMString);deleteData(offset,count);replaceData(offset,count,DOMString)]*/
 var NodeType={
     Element:{NodeType:1,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
     Attribute:{NodeType:2,Child:[Text,EntityReference]},
@@ -42,3 +43,20 @@ var NodeType={
 	console.log(document.getElementsByTagName('body')[0].tagName===document.getElementsByTagName('body')[0].nodeName);
 	console.log(document.doctype,document.documentElement,document.implementation.hasFeature('xml','1.0'),document.getElementsByTagName('*'));
 }();
+/**The Attr Interface Represents An Attribute In An Element Object.Typically The Allowable Values For The Attribute Are Defined In A Document Type Definition.Attr Objects 
+ *Inherit The Node Interface, But Since They Are Not Actually Child Nodes Of The Element They Describe, The DOM Does Not Consider Them Part Of The Document Tree. Thus, The 
+ * Node Attributes parentNode, previousSibling, And nextSibling Have A Null Value For Attr Objects. The DOM Takes The View That Attributes Are Properties Of Elements Rather 
+ * Than Having A Separate Identity From The Elements They Are Associated With; This Should Make It More Efficient To Implement Such Features As Default Attributes Associated 
+ * With All Elements Of A Given Type.Furthermore, Attr Nodes May Not Be Immediate Children Of A DocumentFragment.However, They Can Be Associated With Element Nodes Contained 
+ * Within A DocumentFragment.In Short, Users And Implementors Of The DOM Need To Be Aware That Attr Nodes Have Some Things In Common With Other Objects Inheriting The Node 
+ * Interface,But They Also Are Quite Distinct.The Attribute’S Effective Value Is Determined As Follows: If This Attribute Has Been Explicitly Assigned Any Value, That Value 
+ * Is The Attribute’S Effective Value; Otherwise, If There Is A Declaration For This Attribute, And That Declaration Includes A Default Value, Then That Default Value Is The 
+ * Attribute’s Effective Value; Otherwise, The Attribute Does Not Exist On This Element In The Structure Model Until It Has Been Explicitly Added. Note That The NodeValue 
+ * Attribute On The Attr Instance Can Also Be Used To Retrieve The String Version Of The Attribute’S Value(s).
+ * [Element:[DOMString tagName],[DOMString getAttribute(DOMString name)],[setAttribute(DOMString name,DOMString value)],[removeAttribute(DOMString name)],
+ * [Attr getAttributeNode(DOMString name)],[Attr setAttributeNode(Attr newAttr)],[Attr removeAttributeNode(Attr oldAttr)],[NodeList getElementsByTagName(DOMString name)],
+ * [normalize()]];[Text:[[Text]splitText(offset)]]*/
+var WrapperDiv = document.createElement("div");
+WrapperDiv.appendChild(document.createTextNode("Part.001"));
+WrapperDiv.appendChild(document.createTextNode("Part.002"));
+WrapperDiv.normalize();
