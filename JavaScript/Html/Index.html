@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">  
+    <link rel="stylesheet" href="/Css/Styles.css"> 
+</head>
+<body>
+    <h6>All Listing</h6>
+    <div id="Listing">
+        <select id="SelectOpt01"></select>
+        <input type="button" value="GoToPage" id="GoToPage">
+        <div><a id="RediectAnchor" href="#"></a></div>
+    </div>
+    <script type="text/javascript" src="/Js/jquery.1.12.3.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           $('#SelectOpt01 option').remove();/**CleanUp Operation*/    
+           $.get("/Data/Index.json",function(data){
+               $('#SelectOpt01').change(function(event){$('#RediectAnchor').attr('href',$(this).val());});
+               $('#GoToPage').click(function(){window.location=$('#RediectAnchor').attr('href');});
+               $.each(data.UrlData,function(indx,val){$('#SelectOpt01').append('<option value="'+val.Href+'">'+val.Text+'</option>')}); 
+           }); 
+        });
+    </script>    
+</body>
+</html>
