@@ -1,0 +1,48 @@
+<Ideas>
+    <Idea>Meta Markup Language</Idea>
+    <Idea>
+        Not About Styling Or Formatting,Rather Describes Structure And Semantics.
+        <html>
+            <dt>Hot Cop
+                <dd> by Jacques Morali, Henri Belolo, and Victor Willis
+                    <ul>
+                        <li>Producer: Jacques Morali</li>
+                        <li>Publisher: PolyGram Records</li>
+                        <li>Length: 6:20</li>
+                        <li>Written: 1978</li>
+                        <li>Artist: Village People</li>
+                    </ul>
+                </dd>
+            </dt>
+        </html>
+        <Song>
+            <SongDefinitionTitle>Hot Cop</SongDefinitionTitle>
+            <Composer>Jacques Morali</Composer>
+            <Composer>Henri Belolo</Composer>
+            <Composer>Victor Willis</Composer>
+            <Producer>Jacques Morali</Producer>
+            <Publisher>PolyGram Records</Publisher>
+            <Length>6:20</Length>
+            <Written>1978</Written>
+            <Artist>Village People</Artist>
+        </Song>
+    </Idea>
+    <Idea>Design Of Domain Driven Markup Languages</Idea>
+    <Idea>Self Describing Data
+        <Person Id=”911742” Sex=”Male”>
+            <Name>
+                <Given>Judson</Given>
+                <SurName>McDaniel</SurName>
+            </Name>
+            <Birth>
+                <Date>21 Feb 1834</Date> 
+            </Birth>
+            <Death>
+                <Date>9 Dec 1905</Date>
+            </Death>
+        </Person>
+    </Idea>
+    <Idea>
+        Interchange Of Data Among Application.Structural Data,Integration With Other Data Even Simplest Way.
+    </Idea>
+</Ideas>

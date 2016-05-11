@@ -1,17 +1,17 @@
-var NodeType={
-    Element:{NodeType:1,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
-    Attribute:{NodeType:2,Child:[Text,EntityReference]},
-    Text:{NodeType:3,Child:[]},
-    CharacterDataSection:{NodeType:4,Child:[]},
-    EntityReference:{NodeType:5,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
-    Entity:{NodeType:6,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
-    ProcessingInstruction:{NodeType:7,Child:[]},
-    Comment:{NodeType:8,Child:[]},
-    Document:{NodeType:9,Child:[Element,ProcessingInstruction,Comment,DocumentType]},
-    DocumentType:{NodeType:10,Child:[]},
-    DocumentFragment:{NodeType:11,Child:[Element,ProcessingInstruction,Comment,Text,CDATASection,EntityReference]},
-    Notation:{NodeType:12,Child:[]}
-};
+var NodeType={Element:"",Attribute:"",Text:"",CDATASection:"",EntityReference:"",Entity:"",ProcessingInstruction:"",Comment:"",Document:"",
+              DocumentType:"",DocumentFragment:"",Notation:""};
+NodeType["Element"]={"NodeTypeCode":1,"Child":[NodeType["Element"],NodeType["ProcessingInstruction"],NodeType["Comment"],NodeType["Text"], NodeType["CDATASection"],NodeType["EntityReference"]]};
+NodeType["Attribute"]={"NodeTypeCode":2,"Child":[NodeType["Text"],NodeType["EntityReference"]]},
+NodeType["Text"]={"NodeTypeCode":3,"Child":[]},
+NodeType["CDATASection"]={"NodeTypeCode":4,"Child":[]},
+NodeType["EntityReference"]={"NodeTypeCode":5,"Child":[NodeType["Element"],NodeType["ProcessingInstruction"],NodeType["Comment"],NodeType["Text"],NodeType["CDATASection"],NodeType["EntityReference"]]},
+NodeType["Entity"]={"NodeTypeCode":6,"Child":[NodeType["Element"],NodeType["ProcessingInstruction"],NodeType["Comment"],NodeType["Text"],NodeType["CDATASection"],NodeType["EntityReference"]]},
+NodeType["ProcessingInstruction"]={"NodeTypeCode":7,"Child":[]},
+NodeType["Comment"]={"NodeTypeCode":8,"Child":[]},
+NodeType["Document"]={"NodeTypeCode":9,"Child":[NodeType["Element"],NodeType["ProcessingInstruction"],NodeType["Comment"],NodeType["DocumentType"]]},
+NodeType["DocumentType"]={"NodeTypeCode":10,"Child":[]},
+NodeType["DocumentFragment"]={"NodeType":11,"Child":[NodeType["Element"],NodeType["ProcessingInstruction"],NodeType["Comment"],NodeType["Text"],NodeType["CDATASection"],NodeType["EntityReference"]]},
+NodeType["Notation"]={"NodeTypeCode":12,"Child":[]}
 /**Sample Feature Detection:*/
 var Simpleton=(function(){
     var Exist={};

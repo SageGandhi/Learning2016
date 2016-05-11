@@ -8,6 +8,16 @@
 <body>
     <h6>Different Node Type</h6>
     <script type="text/javascript" src="/Js/jquery.1.12.3.js"></script>
-    <script type="text/javascript" src="/Js/NodeType.js"></script>   
+    <script type="text/javascript" src="/Js/NodeType.js"></script>  
+    <script type="text/javascript">
+    //<![CDATA[Xhtml Supported Browser Parse Cdata Correctly.Commented For Cdata Non-Suppoted Browser
+        ("This Is A Sample Non Parsed <&'\">Character Data Section")
+    //]]>
+    </script>
+    <script type="text/javascript"><!--
+        (function(){
+            return "Nonsupporting Browsers Would Output The Contents Of The <script> Element Onto The Page, Effectively Ruining The Page"+      "Appearance.Solution Was To Enclose The Script Code In An Html Comment";
+        }());
+   //--></script>
 </body>
 </html>
