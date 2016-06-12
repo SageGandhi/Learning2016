@@ -1,0 +1,44 @@
+A Group Of Code & Data Related To A Particular Piece Of Functionality.It Encapsulate Implementation Details,Exposes A Public Api & Is Combined With Other Modules To Build A Larger
+Application.Goals: Create Higher Level Abstraction--Application In Terms Of Larger Building Blocks,Encapsulation,Reusability,Simplify Dependency Management.RequiredJs,SystemJs[
+Module Format & Loader],Babel To Transpile[Translate&Compile],Browserify,Webpack[Module Bundler].Immediately Invoked Function Expression,Revealing Module Pattern-Singleton,Constructor
+Function//ImmediatelyInvokedFunctionExpression(function(param){console.log('ImmediatelyInvokedFunctionExpression',param);}("PrajitGandhi"));//RevealingModulePatternSingleton
+var Singleton=function(params){function AnyFunc(params){}return{AnyFunc:AnyFunc}}("PrajitGandhi");//RevealingModulePatternConstructor//Capitalize Variable Name To Denote Construction
+//Function var Constructor=function(params){function AnyFunc(params){}return{AnyFunc:AnyFunc}},_Constructor=new Constructor();
+ModuleFormat[Native/NonNative,AsynchronousModuleDefinition[Amd],CommonJs Module Format]-->Syntax Of A Module Tobe Defined,UniversalModuleDefinition,System.register
+ModuleLoader[RequireJs[Amd],SystemJs[Amd/CommonJs,System.register,Umd]]-->Loading,Execution Of Module In A Specific Module Format
+JavaScript[Syntax/Module]-->Browser[Loader/Executor]
+Amd Module Syntax:
+define(["Array Of Dependencies Module"],function(/*Callback When Loader Loaded The Module*/){/*define Function Of Amd Loader*/});
+define(['require','dependency'],function(require,factory){'use strict';});
+Use Node Package Manager To Add Dependency In Package.json: npm install requirejs --save
+<script type="text/javascript" data-main="Js File Name For BootStrapping Without Js Extension" src="Js File Location For Module Loader Like RequireJs"></script>
+RequireJs Will Be The Initiator For Other JavaScript Module[Amd Module Loader].No Global Scope Pollution Except Require/Define
+In Case Of CommonJs:
+var RequiredModule=require('ModuleLocation');
+To Export Public Api:
+exports.ApiMethodToBeExposed=ApiDefinition|exports===module.exports
+Add To Export As Property But Not This exports={Keys:Values}/exports=function(){},In This Case We Are Redefining Existing Function & Those Will Not Be Properly Exported.
+But This Is Right module.exports={}/module.exports=function(){}.
+CommonJs Format Using SystemJs:
+<script type="text/javascript" src="Js File Location For Module Loader Like SystemJs"></script>
+<script>System.config({/*Different Properties To Configure Like Meta */});System.import("Root Js To Load Application");</script>
+Es2015 Module:
+Es2015 Module-->Transpile(Bable)-->Popular Module Format(Amd,CommonJs)-->Module Loader(RequireJs,SystemJs)
+Es2015 Module-->Transpile(Bable)-->Popular Module Format(Amd,CommonJs)-->Development/Build Process
+Popular Module Format(Amd,CommonJs)-->Module Loader(RequireJs,SystemJs)-->Runtime
+Named Export:
+export function AnyPublicFunction(){};export function AnyPublicMethod(){};export var AnyPublicVariable={};
+Same As export {AnyPublicFunction,AnyPublicMethod As PublicMethod,AnyPublicVariable};
+Default Export: export default function AnyPublicFunction(){};
+Importing Module:
+import * as <ModuleReferenceName> from <JavaScript Source File>
+import {<ModuleReferenceNameForExposedApi>} from <JavaScript Source File>
+import {<ModuleReferenceNameForExposedApi> as <AliasedName>} from <JavaScript Source File>
+import <DefaultExportReference> from <JavaScript Source File>
+import <DefaultExportReference>,{<ModuleReferenceNameForExposedApi> as <AliasedName>} from <JavaScript Source File>
+ModuleBundler: Alternative To Module Loader,Bundles/Combines Modules In A Single/Fewer Files.Follow Module Dependencies & Correctly Order Dependency Of A Module
+<Any Module Format(Amd,CommonJs,Es2015)>-->Bundler(WebPack,Browserify)-->Merged/Bundle To A Fewer Files-->Browser
+<Any Module Format(Amd,CommonJs,Es2015)>-->Bundler(WebPack,Browserify)-->Merged/Bundle To A Fewer Files---Development/Build Process
+Merged/Bundle To A Fewer Files-->Browser---Runtime
+Make NodeJs Modules Run Into A Browser-->Browserify[Only Used For CommonJs Modules].WebPack Bundles[CommonJs,Amd,Es2015 Module Format]+Bundles Other Static Asset[Css+Font+Images]
+Transpiling Es2015 Modules-->Bundle Transpiled Code.If Bundler Creates Monolithic Module,That Might Take Lots Of Time To Load & Degrades User Experience Use Module Loader.
